@@ -9,6 +9,11 @@ interface Props {
 type SortField = 'date' | 'amount'
 type SortDir = 'asc' | 'desc'
 
+function SortIndicator({ field, sortField, sortDir }: { field: SortField; sortField: SortField; sortDir: SortDir }) {
+  if (sortField !== field) return <span className="ml-1 opacity-30">↕</span>
+  return <span className="ml-1 text-green-400">{sortDir === 'asc' ? '▲' : '▼'}</span>
+}
+
 function fmt(n: number) {
   return '₱' + n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
@@ -93,11 +98,6 @@ export function Ledger({ transactions }: Props) {
   const rangeStart = processed.length === 0 ? 0 : page * pageSize + 1
   const rangeEnd = Math.min((page + 1) * pageSize, processed.length)
 
-  function SortIndicator({ field }: { field: SortField }) {
-    if (sortField !== field) return <span className="ml-1 opacity-30">↕</span>
-    return <span className="ml-1 text-green-400">{sortDir === 'asc' ? '▲' : '▼'}</span>
-  }
-
   return (
     <div className="bg-slate-800 border border-slate-700 rounded-lg p-5">
       <h2 className="text-green-400 text-sm uppercase tracking-widest mb-4">Indestructible Ledger</h2>
@@ -176,7 +176,7 @@ export function Ledger({ transactions }: Props) {
                 className="pb-2 pr-4 cursor-pointer hover:text-slate-300 select-none whitespace-nowrap"
                 onClick={() => handleSort('date')}
               >
-                Date<SortIndicator field="date" />
+                Date<SortIndicator field="date" sortField={sortField} sortDir={sortDir} />
               </th>
               <th className="pb-2 pr-4">Category</th>
               <th className="pb-2 pr-4">Description</th>
@@ -184,7 +184,7 @@ export function Ledger({ transactions }: Props) {
                 className="pb-2 pr-4 text-right cursor-pointer hover:text-slate-300 select-none whitespace-nowrap"
                 onClick={() => handleSort('amount')}
               >
-                Amount<SortIndicator field="amount" />
+                Amount<SortIndicator field="amount" sortField={sortField} sortDir={sortDir} />
               </th>
               <th className="pb-2 pr-4">Method</th>
               <th className="pb-2">Notes</th>
