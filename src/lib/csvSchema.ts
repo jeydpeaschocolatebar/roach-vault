@@ -9,13 +9,19 @@ export interface Transaction {
 }
 
 export const CATEGORY_MAP: Record<string, string> = {
-  'Savings/Investments': 'Savings / Investment',
-  'Savings/Investment': 'Savings / Investment',
-  'savings/investments': 'Savings / Investment',
+  'SAVINGS/INVESTMENTS': 'Savings / Investment',
+  'SAVINGS/INVESTMENT': 'Savings / Investment',
+}
+
+function toTitleCase(s: string): string {
+  return s.replace(/\S+/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
 }
 
 export function normalizeCategory(raw: string): string {
-  return CATEGORY_MAP[raw?.trim()] ?? raw?.trim() ?? 'Other'
+  const cleaned = (raw?.trim() ?? '').replace(/\s+/g, ' ')
+  if (!cleaned) return 'Other'
+  const mapped = CATEGORY_MAP[cleaned.toUpperCase()]
+  return mapped ?? toTitleCase(cleaned)
 }
 
 export const PIE_COLORS = [
