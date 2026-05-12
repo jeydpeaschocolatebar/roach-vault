@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Filter, X } from 'lucide-react'
 import type { Transaction } from '../lib/csvSchema'
 
 interface Props {
@@ -102,43 +102,70 @@ export function Ledger({ transactions }: Props) {
     <div className="bg-slate-800 border border-slate-700 rounded-lg p-5">
       <h2 className="text-green-400 text-sm uppercase tracking-widest mb-4">Indestructible Ledger</h2>
 
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        <input
-          type="date"
-          value={dateFrom}
-          onChange={handleFilter(setDateFrom)}
-          className={INPUT_CLS}
-          placeholder="From"
-          title="Date from"
-        />
-        <input
-          type="date"
-          value={dateTo}
-          onChange={handleFilter(setDateTo)}
-          className={INPUT_CLS}
-          placeholder="To"
-          title="Date to"
-        />
-        <select value={filterCategory} onChange={handleFilter(setFilterCategory)} className={INPUT_CLS}>
-          <option value="">All categories</option>
-          {categories.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
-        <select value={filterMethod} onChange={handleFilter(setFilterMethod)} className={INPUT_CLS}>
-          <option value="">All methods</option>
-          {methods.map((m) => (
-            <option key={m} value={m}>{m}</option>
-          ))}
-        </select>
-        {isFiltered && (
-          <button
-            onClick={resetFilters}
-            className="text-xs text-slate-400 hover:text-red-400 transition-colors px-2 py-1 rounded border border-slate-600 hover:border-red-400"
-          >
-            Reset
-          </button>
-        )}
+      <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4 mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Filter className="w-3.5 h-3.5 text-slate-500" />
+            <span className="text-xs uppercase tracking-widest text-slate-500">Filters</span>
+            {isFiltered && (
+              <span className="text-xs bg-green-400/10 text-green-400 border border-green-400/20 rounded-full px-2 py-0.5 leading-none">
+                {[dateFrom || dateTo, filterCategory, filterMethod].filter(Boolean).length} active
+              </span>
+            )}
+          </div>
+          {isFiltered && (
+            <button
+              onClick={resetFilters}
+              className="flex items-center gap-1 text-xs text-slate-500 hover:text-red-400 transition-colors"
+            >
+              <X className="w-3 h-3" />
+              Clear all
+            </button>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col gap-1 min-w-0">
+            <label className="text-xs text-slate-500 uppercase tracking-wider">Date Range</label>
+            <div className="flex items-center gap-1.5">
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={handleFilter(setDateFrom)}
+                className={INPUT_CLS}
+                title="From date"
+              />
+              <span className="text-slate-600 text-xs">→</span>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={handleFilter(setDateTo)}
+                className={INPUT_CLS}
+                title="To date"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1 min-w-0">
+            <label className="text-xs text-slate-500 uppercase tracking-wider">Category</label>
+            <select value={filterCategory} onChange={handleFilter(setFilterCategory)} className={INPUT_CLS}>
+              <option value="">All categories</option>
+              {categories.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1 min-w-0">
+            <label className="text-xs text-slate-500 uppercase tracking-wider">Method</label>
+            <select value={filterMethod} onChange={handleFilter(setFilterMethod)} className={INPUT_CLS}>
+              <option value="">All methods</option>
+              {methods.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       <div className="overflow-x-auto">
