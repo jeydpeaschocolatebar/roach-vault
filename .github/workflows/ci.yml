@@ -13,7 +13,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - run: rm -f package-lock.json && npm install
       - run: npm run lint
       - run: npm run build
       - run: npm test -- --run
+      - run: npm run coverage
