@@ -1,8 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
+@theme {
   --color-vault-bg: #0f172a;
   --color-vault-accent: #22c55e;
 }
